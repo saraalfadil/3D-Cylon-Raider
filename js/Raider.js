@@ -26,10 +26,41 @@ Raider = function(game) {
 
     this.scene.activeCamera.target = raider[0];
     raider[0].material = raiderMaterial;
+    
+    // Store reference to raider mesh for animation
+    this.raiderMesh = raider[0];
+    
+    // Track time for pulsing glow
+    this.elapsedTime = 0;
+    
+    // Setup animation
+    this._setupAnimations();
 
 };
 
 Raider.prototype = {
+
+    /**
+     * Setup animations for the raider
+     * @private
+     */
+    _setupAnimations : function() {
+        var _this = this;
+        var orbitRadius = 15;
+        var orbitSpeed = 0.003;
+        
+        // Register animation loop
+        this.scene.registerBeforeRender(function() {
+            _this.elapsedTime += 0.016; // ~60fps
+            
+            // Orbital movement
+            _this.raiderMesh.position.x = Math.cos(_this.elapsedTime * orbitSpeed) * orbitRadius;
+            _this.raiderMesh.position.z = Math.sin(_this.elapsedTime * orbitSpeed) * orbitRadius;
+            
+            // Rotate the raider on Y axis
+            _this.raiderMesh.rotation.y += 0.005;
+        });
+    },
 
     /**
      * Init the raider camera
