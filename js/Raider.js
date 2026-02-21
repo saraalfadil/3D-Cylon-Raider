@@ -22,7 +22,8 @@ Raider = function(game) {
 
     var raiderMaterial = new BABYLON.StandardMaterial("texture2", this.scene);
     raiderMaterial.diffuseTexture = new BABYLON.Texture("texture.jpg", this.scene);
-    //raiderMaterial.specularColor = new BABYLON.Color3(0, 50, 0);
+    raiderMaterial.specularColor = new BABYLON.Color3(0.5, 0, 0);
+    raiderMaterial.emissiveColor = new BABYLON.Color3(0.3, 0, 0);
 
     this.scene.activeCamera.target = raider[0];
     raider[0].material = raiderMaterial;
@@ -30,7 +31,6 @@ Raider = function(game) {
     // Store reference to raider mesh for animation
     this.raiderMesh = raider[0];
     
-    // Track time for pulsing glow
     this.elapsedTime = 0;
     
     // Setup animation
@@ -59,6 +59,10 @@ Raider.prototype = {
             
             // Rotate the raider on Y axis
             _this.raiderMesh.rotation.y += 0.005;
+            
+            // Pulsing glow effect
+            var glowIntensity = 0.3 + 0.15 * Math.sin(_this.elapsedTime * 2);
+            _this.raiderMesh.material.emissiveColor = new BABYLON.Color3(glowIntensity, 0, 0);
         });
     },
 
